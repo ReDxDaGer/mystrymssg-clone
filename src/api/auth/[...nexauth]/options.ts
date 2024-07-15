@@ -29,12 +29,23 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("User is not verified, Please Verify your account first!!")
                 }
 
-                await bcrypt.compare(credentials.password, User.password);
+                const isPasswordCorrect = await bcrypt.compare(credentials.password, User.password);
+
+                if(isPasswordCorrect){
+                    return User;
+                }
+                else{
+                    throw new Error("Incorrect Password!!")
+                }
 
                 }catch(error: any){
                     throw new Error("Error while authorizing the user" , error);
                 }
             }
         })
-    ]
+    ],
+    pages: {
+        signIn: "/sign-in",
+        signOut: "/sign-out",
+    }
 }
